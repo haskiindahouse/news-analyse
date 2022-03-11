@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-import networkx
 import nltk
 from nltk.corpus import stopwords
 from nltk.cluster.util import cosine_distance
@@ -68,17 +67,15 @@ def generate_summary(data, stop_words, top_n=5):
     sentences = read_article(data)
 
     sentence_similarity_martix = build_similarity_matrix(sentences, stop_words)
-    # Step 3 - Rank sentences in similarity martix
+
     sentence_similarity_graph = nx.from_numpy_array(sentence_similarity_martix)
+
     scores = nx.pagerank(sentence_similarity_graph)
-    # Step 4 - Sort the rank and pick top sentences
     ranked_sentence = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
-
-
     for i in range(top_n):
         summarize_text.append(" ".join(ranked_sentence[i][1]))
-        # Step 5 - Offcourse, output the summarize texr
-    print("Краткая сведения по тексту: \n", ". ".join(summarize_text))
+
+    print("Краткие сведения по тексту: \n", ". ".join(summarize_text))
 
 
 def run_summarize_for_all(file_name):
